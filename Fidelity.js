@@ -106,7 +106,7 @@ TransactionLoader.prototype = {
                         entry.inv = tds[1].innerText.trim();
                         entry.type = tds[2].innerText.trim();
                         entry.amount = tds[3].innerText.trim().cleanAmount();
-                        entry.shares = tds[4].innerText.trim();
+                        entry.shares = tds[4].innerText.trim().cleanAmount();
                     }
 
                     // Details rows
@@ -118,7 +118,7 @@ TransactionLoader.prototype = {
                             var details = {
                                 source : tds[1].innerText.trim(), 
                                 amount : tds[2].innerText.trim().cleanAmount(),
-                                shares : tds[3].innerText.trim()
+                                shares : tds[3].innerText.trim().cleanAmount()
                             };
                             entry.tx.push(details);
                         }
