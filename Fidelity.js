@@ -35,32 +35,8 @@ TransactionLoader.prototype =
     constructor: TransactionLoader,
 
     loadData : function() {
-
         this.loadRange();
-        // contributions
-        for (var c = 0; c < 10; c++)
-        {
-            var id = 'contribGroup_' + (0 + c);
-            var tbody = document.getElementById(id);
-            if (tbody != null)
-            {
-                var trs = tbody.rows;
-                for (var row = 0; row < trs.length; row++)
-                {
-                    if (trs[row].className.indexOf('group_details') > -1)
-                    {
-                        var tds = trs[row].getElementsByTagName("td");
-                        var entry = { 
-                                source : tds[1].innerText.trim(), 
-                            amount : tds[2].innerText.cleanAmount()
-                        };
-                        this.transactions.contributions.push(entry);
-                    }
-                }
-            }
-        }
-        this.transactions.contributions.sort();
-
+        this.loadContributions();
         // transactions
         for (var inv = 0; inv < 100; inv++)
         {
@@ -140,6 +116,31 @@ TransactionLoader.prototype =
                 break;
             }
         }
+    },
+    
+    loadContributions : function() {
+        for (var c = 0; c < 10; c++)
+        {
+            var id = 'contribGroup_' + (0 + c);
+            var tbody = document.getElementById(id);
+            if (tbody != null)
+            {
+                var trs = tbody.rows;
+                for (var row = 0; row < trs.length; row++)
+                {
+                    if (trs[row].className.indexOf('group_details') > -1)
+                    {
+                        var tds = trs[row].getElementsByTagName("td");
+                        var entry = { 
+                                source : tds[1].innerText.trim(), 
+                            amount : tds[2].innerText.cleanAmount()
+                        };
+                        this.transactions.contributions.push(entry);
+                    }
+                }
+            }
+        }
+        this.transactions.contributions.sort();
     }
 }
 
