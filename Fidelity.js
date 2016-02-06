@@ -30,26 +30,13 @@ function TransactionLoader() {
     };
 }
 
-TransactionLoader.prototype = 
-{
+TransactionLoader.prototype = {
     constructor: TransactionLoader,
 
     loadData : function() {
         this.loadRange();
         this.loadContributions();
         this.loadTransactions();
-
-        for (var i = 0; i < this.transactions.data.length; i++)
-        {
-            var transactions = this.transactions.data[i].tx;
-            for (var t = 0; t < transactions.length; t++)
-            {
-                var s = transactions[t].source;
-                if (this.transactions.sources.indexOf(s) == -1) 
-                    this.transactions.sources.push(s);
-            }
-        }
-        this.transactions.sources.sort();
     },
 
     getData : function() {
@@ -69,7 +56,7 @@ TransactionLoader.prototype =
     },
     
     loadContributions : function() {
-        for (var c = 0; c < 10; c++)
+        for (var c = 0; c < 10; c++) // we expect max 10 contribution groups.. generally, this is 1-3.
         {
             var id = 'contribGroup_' + (0 + c);
             var tbody = document.getElementById(id);
@@ -78,11 +65,10 @@ TransactionLoader.prototype =
                 var trs = tbody.rows;
                 for (var row = 0; row < trs.length; row++)
                 {
-                    if (trs[row].className.indexOf('group_details') > -1)
-                    {
+                    if (trs[row].className.indexOf('group_details') > -1) {
                         var tds = trs[row].getElementsByTagName("td");
                         var entry = { 
-                                source : tds[1].innerText.trim(), 
+                            source : tds[1].innerText.trim(), 
                             amount : tds[2].innerText.cleanAmount()
                         };
                         this.transactions.contributions.push(entry);
@@ -91,42 +77,42 @@ TransactionLoader.prototype =
             }
         }
         this.transactions.contributions.sort();
-     },
+    },
      
-     loadTransactions : function() {
-        for (var inv = 0; inv < 100; inv++)
+    loadTransactions : function() {
+        for (var inv = 0; inv < 1000; inv++)
         {
             var id = 'investGroup_' + (0 + inv);
             var tbody = document.getElementById(id);
             if (tbody != null)
             {
-                expand(id);
+                expand(id); // maps to fidelity expand function that shows the collapsed transaction information.
                 var trs = tbody.rows;
                 var entry = { date : '', inv : '', type : '', amount : '', shares : '', tx : [] };
-                
-                for (var i = 0, len = trs.length; i < len; i++)
+
+                for (var row = 0, len = trs.length; row < len; row++)
                 {
                     // Info row
-                    if (trs[i].className.indexOf('group_info') > -1)
+                    if (trs[row].className.indexOf('group_info') > -1)
                     {
-                        var tds = trs[i].getElementsByTagName("td");
-                    
-                    var datecell = tds[0].cloneNode(true);
+                        var tds = trs[row].getElementsByTagName("td");
 
-                    // remove p element
+                        var datecell = tds[0].cloneNode(true);
+
+                        // remove p element
                         datecell.getElementsByTagName("p")[0].remove();
-                        
+
                         entry.date = datecell.innerText.trim();
                         entry.inv = tds[1].innerText.trim();
                         entry.type = tds[2].innerText.trim();
                         entry.amount = tds[3].innerText.trim().cleanAmount();
                         entry.shares = tds[4].innerText.trim();
                     }
-                
+
                     // Details rows
-                    if (trs[i].className == "group_details")
+                    if (trs[row].className == "group_details")
                     {
-                        var tds = trs[i].getElementsByTagName("td");
+                        var tds = trs[row].getElementsByTagName("td");
                         if (tds[1].innerText != 'Sources')
                         {
                             var details = {
@@ -139,12 +125,29 @@ TransactionLoader.prototype =
                     }
 
                     entry.tx.sort(function(a,b) { return a.source < b.source ? -1 : 1; });
-
                 }
+            
                 this.transactions.data.push(entry);
             }
-         }
-     }
+        }
+
+        this.loadSources();
+    },
+     
+    loadSources : function() {
+        for (var i = 0; i < this.transactions.data.length; i++)
+        {
+            var transactions = this.transactions.data[i].tx;
+            for (var t = 0; t < transactions.length; t++)
+            {
+                var s = transactions[t].source;
+                if (this.transactions.sources.indexOf(s) == -1) { 
+                    this.transactions.sources.push(s);
+                }
+            }
+        }
+        this.transactions.sources.sort();
+    }     
 }
 
 var loader = new TransactionLoader();
