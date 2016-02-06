@@ -35,16 +35,8 @@ TransactionLoader.prototype =
     constructor: TransactionLoader,
 
     loadData : function() {
-        var range = document.getElementsByTagName('h3');
-        for (var i = 0; i < range.length; i++)
-        {
-            if (range[i].innerText.indexOf('Transaction History Period:') > -1)
-            {
-                this.transactions.range = range[i].innerText.substring(range[i].innerText.indexOf(':') + 1).trim();
-                break;
-            }
-        }
 
+        this.loadRange();
         // contributions
         for (var c = 0; c < 10; c++)
         {
@@ -136,6 +128,18 @@ TransactionLoader.prototype =
 
     getData : function() {
         return this.transactions;
+    },
+    
+    loadRange : function() {
+        var range = document.getElementsByTagName('h3');
+        for (var i = 0; i < range.length; i++)
+        {
+            if (range[i].innerText.indexOf('Transaction History Period:') > -1)
+            {
+                this.transactions.range = range[i].innerText.substring(range[i].innerText.indexOf(':') + 1).trim();
+                break;
+            }
+        }
     }
 }
 
