@@ -21,13 +21,13 @@ if (!String.prototype.cleanAmount) {
    String.prototype.cleanAmount = function(s) { return this.trim().replace(/[,$]+/g, ''); }
 }
 
-var tx = { range: '', sources: [], contributions : [], data : [] };
-// { 
-//     range : ''.
-//     sources : [], 
-//     contributions : [ {source, amount }],
-//     data : [ { date, inv, type, amount, shares, tx : [source, amount, shares] } ]
-//  };
+// Format
+var tx = { 
+    range: '',          // transactions from date start to date end 
+    sources: [],        // types of sources
+    contributions : [], // [ {source, amount }], 
+    data : []           // [ { date, inv, type, amount, shares, tx : [source, amount, shares] } ] 
+};
 
 var range = document.getElementsByTagName('h3');
 for (var i = 0; i < range.length; i++)
