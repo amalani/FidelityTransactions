@@ -37,57 +37,7 @@ TransactionLoader.prototype =
     loadData : function() {
         this.loadRange();
         this.loadContributions();
-        // transactions
-        for (var inv = 0; inv < 100; inv++)
-        {
-            var id = 'investGroup_' + (0 + inv);
-            var tbody = document.getElementById(id);
-            if (tbody != null)
-            {
-                expand(id);
-                var trs = tbody.rows;
-                var entry = { date : '', inv : '', type : '', amount : '', shares : '', tx : [] };
-                
-                for (var i = 0, len = trs.length; i < len; i++)
-                {
-                    // Info row
-                    if (trs[i].className.indexOf('group_info') > -1)
-                    {
-                        var tds = trs[i].getElementsByTagName("td");
-                    
-                    var datecell = tds[0].cloneNode(true);
-
-                    // remove p element
-                        datecell.getElementsByTagName("p")[0].remove();
-                        
-                        entry.date = datecell.innerText.trim();
-                        entry.inv = tds[1].innerText.trim();
-                        entry.type = tds[2].innerText.trim();
-                        entry.amount = tds[3].innerText.trim().cleanAmount();
-                        entry.shares = tds[4].innerText.trim();
-                    }
-                
-                    // Details rows
-                    if (trs[i].className == "group_details")
-                    {
-                        var tds = trs[i].getElementsByTagName("td");
-                        if (tds[1].innerText != 'Sources')
-                        {
-                            var details = {
-                                source : tds[1].innerText.trim(), 
-                                amount : tds[2].innerText.trim().cleanAmount(),
-                                shares : tds[3].innerText.trim()
-                            };
-                            entry.tx.push(details);
-                        }
-                    }
-
-                    entry.tx.sort(function(a,b) { return a.source < b.source ? -1 : 1; });
-
-                }
-                this.transactions.data.push(entry);
-            }
-        }
+        this.loadTransactions();
 
         for (var i = 0; i < this.transactions.data.length; i++)
         {
@@ -141,7 +91,60 @@ TransactionLoader.prototype =
             }
         }
         this.transactions.contributions.sort();
-    }
+     },
+     
+     loadTransactions : function() {
+        for (var inv = 0; inv < 100; inv++)
+        {
+            var id = 'investGroup_' + (0 + inv);
+            var tbody = document.getElementById(id);
+            if (tbody != null)
+            {
+                expand(id);
+                var trs = tbody.rows;
+                var entry = { date : '', inv : '', type : '', amount : '', shares : '', tx : [] };
+                
+                for (var i = 0, len = trs.length; i < len; i++)
+                {
+                    // Info row
+                    if (trs[i].className.indexOf('group_info') > -1)
+                    {
+                        var tds = trs[i].getElementsByTagName("td");
+                    
+                    var datecell = tds[0].cloneNode(true);
+
+                    // remove p element
+                        datecell.getElementsByTagName("p")[0].remove();
+                        
+                        entry.date = datecell.innerText.trim();
+                        entry.inv = tds[1].innerText.trim();
+                        entry.type = tds[2].innerText.trim();
+                        entry.amount = tds[3].innerText.trim().cleanAmount();
+                        entry.shares = tds[4].innerText.trim();
+                    }
+                
+                    // Details rows
+                    if (trs[i].className == "group_details")
+                    {
+                        var tds = trs[i].getElementsByTagName("td");
+                        if (tds[1].innerText != 'Sources')
+                        {
+                            var details = {
+                                source : tds[1].innerText.trim(), 
+                                amount : tds[2].innerText.trim().cleanAmount(),
+                                shares : tds[3].innerText.trim()
+                            };
+                            entry.tx.push(details);
+                        }
+                    }
+
+                    entry.tx.sort(function(a,b) { return a.source < b.source ? -1 : 1; });
+
+                }
+                this.transactions.data.push(entry);
+            }
+         }
+     }
 }
 
 var loader = new TransactionLoader();
