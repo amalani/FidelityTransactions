@@ -58,6 +58,11 @@ CSVExporter.prototype = {
     run : function() {
         if (this.verifyInput()) {
 
+            // Read file contents
+            var reader = this.fso.OpenTextFile(this.inputFile, 1 /*read*/);
+            var fileContents = reader.ReadAll();
+            reader.close();
+        }    
     },
 
     verifyInput : function() {
