@@ -62,7 +62,26 @@ CSVExporter.prototype = {
             var reader = this.fso.OpenTextFile(this.inputFile, 1 /*read*/);
             var fileContents = reader.ReadAll();
             reader.close();
+
+            // Handle contents as JSON
+            var obj = eval('(' + fileContents + ')');
+
+            // Convert to CSV.
+            // console.log(obj);
+            var output = this.convertToCSV(obj);
+            console.log(output);
+
+            // Write csv data to disk.
+            var writer = this.fso.OpenTextFile(this.outputFile, 2 /*write*/, true /*create*/);
+            writer.Write(output);
+            writer.close();
         }    
+    },
+
+    convertToCSV : function(obj) {
+        var data = [];
+
+        return data.join('\n');
     },
 
     verifyInput : function() {
