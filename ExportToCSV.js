@@ -48,8 +48,8 @@ function CSVExporter() {
 
     this.fso = new ActiveXObject("Scripting.FileSystemObject");
     this.folder = this.fso.getFolder(".");
-    this.input = '';
-    this.output = '';
+    this.input = null;
+    this.output = null;
 }
 
 CSVExporter.prototype = {
