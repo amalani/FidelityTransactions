@@ -45,12 +45,28 @@ function CSVExporter() {
             contributions : [], // [ {source, amount }], 
             data : []           // [ { date, inv, type, amount, shares, tx : [source, amount, shares] } ] 
     };
+
+    this.fso = new ActiveXObject("Scripting.FileSystemObject");
+    this.folder = this.fso.getFolder(".");
 }
 
 CSVExporter.prototype = {
     constructor: CSVExporter,
+    
     run : function() {
-        console.log('dummy');
+        if (this.verifyInput()) {
+
+        }    
+    },
+
+    verifyInput : function() {
+        // Verify that a single file path with json data was passed as an argument.
+        if (context.arguments.length != 1) {
+            console.log('Invalid input - either drag and drop a file on this script, or pass using command line arguments.\n\tcscript ExportToCSV.js C:\\SampleData.js\n\twscript ExportToCSV.js C:\\SampleData.js');
+            return false;
+        }
+
+        return true;
     }
 }
 
