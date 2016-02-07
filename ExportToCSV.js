@@ -22,8 +22,7 @@ context.loadArguments();
 // Finds an item in an array.
 if (!Array.prototype.indexOf) {
    Array.prototype.indexOf = function(s) {
-      for (var i = 0; i < this.length; i++)
-      {
+      for (var i = 0; i < this.length; i++) {
          if (this[i].indexOf(s) > -1) return i;
       }
       return -1;
@@ -123,7 +122,6 @@ CSVExporter.prototype = {
 
             data.push(row.join(','));
         }
-
 
         return data;
     },
