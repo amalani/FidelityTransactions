@@ -67,7 +67,6 @@ CSVExporter.prototype = {
             var obj = eval('(' + fileContents + ')');
 
             // Convert to CSV.
-            // console.log(obj);
             var output = this.convertToCSV(obj);
             console.debug(output);
 
@@ -75,6 +74,8 @@ CSVExporter.prototype = {
             var writer = this.fso.OpenTextFile(this.outputFile, 2 /*write*/, true /*create*/);
             writer.Write(output);
             writer.close();
+
+            console.log('Exported to ' + this.outputFile);
         }    
     },
 
