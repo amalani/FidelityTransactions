@@ -23,10 +23,10 @@ if (!String.prototype.cleanAmount) {
 
 function TransactionLoader() {
     this.transactions = { 
-            range: '',          // transactions from date start to date end 
+            range: null,          // transactions from date start to date end 
             sources: [],        // types of sources
-            contributions : [], // [ {source, amount }], 
-            data : []           // [ { date, inv, type, amount, shares, tx : [source, amount, shares] } ] 
+            contributions : [], // [ {source, amount} ], 
+            data : []           // [ {date, inv, type, amount, shares, tx : [source, amount, shares]} ] 
     };
 }
 

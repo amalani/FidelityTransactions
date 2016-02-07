@@ -57,7 +57,6 @@ CSVExporter.prototype = {
     
     run : function() {
         if (this.verifyInput()) {
-
             // Read file contents
             var reader = this.fso.OpenTextFile(this.inputFile, 1 /*read*/);
             var fileContents = reader.ReadAll();
@@ -67,12 +66,15 @@ CSVExporter.prototype = {
             var obj = eval('(' + fileContents + ')');
 
             // Convert to CSV.
-            var output = this.convertToCSV(obj);
-            console.debug(output);
+            var data = this.convertToCSV(obj);
+            console.debug(data);
 
             // Write csv data to disk.
             var writer = this.fso.OpenTextFile(this.outputFile, 2 /*write*/, true /*create*/);
-            writer.Write(output);
+            for (var i = 0; i < data.length; i++)
+            {
+                writer.WriteLine(data[i]);
+            }
             writer.close();
 
             console.log('Exported to ' + this.outputFile);
@@ -92,14 +94,8 @@ CSVExporter.prototype = {
         // Transactions (the website will provide in reverse chronological order)
         for (var i = obj.data.length - 1; i >= 0; i--) {
             var tx = obj.data[i];
-            var row = [];
 
-            row.push(tx.date);
-            row.push(tx.inv);
-            row.push(this.getSanitizedTransactionType(tx.type));
-            row.push(tx.amount);
-            row.push(tx.shares);
-            row.push('');
+            var row = [tx.date, tx.inv, this.getSanitizedTransactionType(tx.type), tx.amount, tx.shares, ''];
 
             // Transaction source types.
             var offset = 0;
@@ -129,7 +125,7 @@ CSVExporter.prototype = {
         }
 
 
-        return data.join('\n');
+        return data;
     },
 
     getSanitizedTransactionType : function(s) {
