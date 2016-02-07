@@ -44,10 +44,8 @@ TransactionLoader.prototype = {
     
     loadRange : function() {
         var range = document.getElementsByTagName('h3');
-        for (var i = 0; i < range.length; i++)
-        {
-            if (range[i].innerText.indexOf('Transaction History Period:') > -1)
-            {
+        for (var i = 0; i < range.length; i++) {
+            if (range[i].innerText.indexOf('Transaction History Period:') > -1) {
                 this.transactions.range = range[i].innerText.substring(range[i].innerText.indexOf(':') + 1).trim();
                 break;
             }
@@ -55,15 +53,12 @@ TransactionLoader.prototype = {
     },
     
     loadContributions : function() {
-        for (var c = 0; c < 10; c++) // we expect max 10 contribution groups.. generally, this is 1-3.
-        {
+        for (var c = 0; c < 10; c++) { // we expect max 10 contribution groups.. generally, this is 1-3. 
             var id = 'contribGroup_' + (0 + c);
             var tbody = document.getElementById(id);
-            if (tbody != null)
-            {
+            if (tbody != null) {
                 var trs = tbody.rows;
-                for (var row = 0; row < trs.length; row++)
-                {
+                for (var row = 0; row < trs.length; row++) {
                     if (trs[row].className.indexOf('group_details') > -1) {
                         var tds = trs[row].getElementsByTagName("td");
                         var entry = { 
@@ -79,21 +74,17 @@ TransactionLoader.prototype = {
     },
      
     loadTransactions : function() {
-        for (var inv = 0; inv < 1000; inv++)
-        {
+        for (var inv = 0; inv < 1000; inv++) {
             var id = 'investGroup_' + (0 + inv);
             var tbody = document.getElementById(id);
-            if (tbody != null)
-            {
+            if (tbody != null) {
                 expand(id); // maps to fidelity expand function that shows the collapsed transaction information.
                 var trs = tbody.rows;
                 var entry = { date : '', inv : '', type : '', amount : '', shares : '', tx : [] };
 
-                for (var row = 0, len = trs.length; row < len; row++)
-                {
+                for (var row = 0, len = trs.length; row < len; row++) {
                     // Info row
-                    if (trs[row].className.indexOf('group_info') > -1)
-                    {
+                    if (trs[row].className.indexOf('group_info') > -1) {
                         var tds = trs[row].getElementsByTagName("td");
 
                         var datecell = tds[0].cloneNode(true);
@@ -109,11 +100,9 @@ TransactionLoader.prototype = {
                     }
 
                     // Details rows
-                    if (trs[row].className == "group_details")
-                    {
+                    if (trs[row].className == "group_details") {
                         var tds = trs[row].getElementsByTagName("td");
-                        if (tds[1].innerText != 'Sources')
-                        {
+                        if (tds[1].innerText != 'Sources') {
                             var details = {
                                 source : tds[1].innerText.trim(), 
                                 amount : tds[2].innerText.trim().cleanAmount(),
@@ -134,11 +123,9 @@ TransactionLoader.prototype = {
     },
      
     loadSources : function() {
-        for (var i = 0; i < this.transactions.data.length; i++)
-        {
+        for (var i = 0; i < this.transactions.data.length; i++) {
             var transactions = this.transactions.data[i].tx;
-            for (var t = 0; t < transactions.length; t++)
-            {
+            for (var t = 0; t < transactions.length; t++) {
                 var s = transactions[t].source;
                 if (this.transactions.sources.indexOf(s) == -1) { 
                     this.transactions.sources.push(s);
