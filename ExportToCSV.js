@@ -48,6 +48,8 @@ function CSVExporter() {
 
     this.fso = new ActiveXObject("Scripting.FileSystemObject");
     this.folder = this.fso.getFolder(".");
+    this.input = '';
+    this.output = '';
 }
 
 CSVExporter.prototype = {
@@ -66,6 +68,13 @@ CSVExporter.prototype = {
             return false;
         }
 
+        try {
+            this.input = this.fso.getFile(context.arguments[0]);
+        }
+        catch (ex) {
+            console.log('Could not open file: ' + context.arguments[0]);
+            return false;
+        }
         return true;
     }
 }
