@@ -2,7 +2,7 @@
 var console = {
     log : function(s) { WScript.Echo(s); },
     debug : function(s) { if (this.isDebugging) this.log(s); },
-    isDebugging : true
+    isDebugging : false
 };
 function alert(s) { console.log(s); }
 
@@ -48,8 +48,8 @@ function CSVExporter() {
 
     this.fso = new ActiveXObject("Scripting.FileSystemObject");
     this.folder = this.fso.getFolder(".");
-    this.input = null;
-    this.output = null;
+    this.inputFile = null;
+    this.outputFile = null;
 }
 
 CSVExporter.prototype = {
@@ -58,7 +58,6 @@ CSVExporter.prototype = {
     run : function() {
         if (this.verifyInput()) {
 
-        }    
     },
 
     verifyInput : function() {
@@ -68,13 +67,30 @@ CSVExporter.prototype = {
             return false;
         }
 
+        // File access.
         try {
-            this.input = this.fso.getFile(context.arguments[0]);
+            this.inputFile = context.arguments[0];
+            var checkFile = this.fso.getFile(this.inputFile);
         }
         catch (ex) {
-            console.log('Could not open file: ' + context.arguments[0]);
+            console.log('Could not open file: ' + this.inputFile);
             return false;
         }
+
+        // Create output file name as original filename with a csv extension (or add extension if missing)
+        var inputPath = this.inputFile.substr(0, this.inputFile.lastIndexOf('\\'));
+        var inputFileName = this.inputFile.substr(this.inputFile.lastIndexOf('\\') + 1)
+        console.debug(inputPath + ' ' + inputFileName);
+
+        var outputFileName = '';
+        if (inputFileName.indexOf('.') > -1) {
+            outputFileName = inputFileName.substr(0, inputFileName.lastIndexOf('.')) + '.csv';
+        }
+        else {
+            outputFileName = inputFileName + '.csv';
+        }
+        this.outputFile = inputPath + '\\' + outputFileName;
+        console.debug(this.outputFile);
         return true;
     }
 }
