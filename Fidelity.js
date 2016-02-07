@@ -22,7 +22,7 @@ if (!String.prototype.cleanAmount) {
 
 function TransactionLoader() {
     this.transactions = { 
-            range: null,          // transactions from date start to date end 
+            range: null,        // transactions from date start to date end 
             sources: [],        // types of sources
             contributions : [], // [ {source, amount} ], 
             data : []           // [ {date, inv, type, amount, shares, tx : [source, amount, shares]} ] 
@@ -137,15 +137,19 @@ TransactionLoader.prototype = {
 
     download : function() {
         var dummy = document.createElement('a');
-        dummy.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(this.getData())));
+        dummy.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(this.getJSONData()));
         dummy.setAttribute('download', 'transactions.js');
         document.body.appendChild(dummy);
         dummy.click();
         document.body.removeChild(dummy);
+    },
+
+    getJSONData : function() {
+        return JSON.stringify(this.getData());
     }
 }
 
 var loader = new TransactionLoader();
 loader.loadData();
 loader.download();
-// console.log(JSON.stringify(loader.getData())); // Uncomment if you want to see contents in the console tab.
+// console.log(loader.getJSONData()); // Uncomment if you want to see contents in the console tab.
