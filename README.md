@@ -9,14 +9,13 @@ I was maintaining a spreadsheet of my own all this while by looking at their web
 To use this, you need a browser that has developer tools built in (Press F12 to see if it shows up).
 
 There are two files - Fidelity.js and ExportToCSV.js
-1. Fidelity.js - scrapes the transaction history page on the website and pastes the contents in JSON format in the console window.
+1. Fidelity.js - scrapes the transaction history page on the website and downloads a file (transactions.js) containing the JSON data.
 2. ExportToCSV - converts the JSON contents into a CSV file which can then be opened in Microsoft Excel.
 
 To use:
 1. Log in to your Fidelity a/c. Click on the 401k account page and then on transaction history. Select the range of dates you want - I typically choose the 1/1/year - 12/31/year and press the 'Get details' button.
 2. Select the contents of Fidelity.js and press Ctrl+C or copy to your clipboard.
-3. Press F12 to open developer tools and click on the console tab. Paste the contents of your clipboard there and press enter.
-4. You'll see something like the following (without all the whitespace) - copy the entire contents and save to a file locally as transactions.js. You can also look at SampleData.js in the repository.
+3. Press F12 to open developer tools and click on the console tab. Paste the contents of your clipboard there and press enter. This will trigger a download of a file named transactions.js which contains all the transactions in JSON format. You can uncomment the last line in the script to paste the contents in the console window itself. The contents will look something like the following, or you can also look at SampleData.js in the repository.
 
 <pre>
 {

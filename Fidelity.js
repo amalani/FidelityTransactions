@@ -133,9 +133,19 @@ TransactionLoader.prototype = {
             }
         }
         this.transactions.sources.sort();
-    }     
+    },
+
+    download : function() {
+        var dummy = document.createElement('a');
+        dummy.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(this.getData())));
+        dummy.setAttribute('download', 'transactions.js');
+        document.body.appendChild(dummy);
+        dummy.click();
+        document.body.removeChild(dummy);
+    }
 }
 
 var loader = new TransactionLoader();
 loader.loadData();
-console.log(JSON.stringify(loader.getData()));
+loader.download();
+// console.log(JSON.stringify(loader.getData())); // Uncomment if you want to see contents in the console tab.
