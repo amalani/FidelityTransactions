@@ -69,7 +69,7 @@ CSVExporter.prototype = {
             // Convert to CSV.
             // console.log(obj);
             var output = this.convertToCSV(obj);
-            console.log(output);
+            console.debug(output);
 
             // Write csv data to disk.
             var writer = this.fso.OpenTextFile(this.outputFile, 2 /*write*/, true /*create*/);
@@ -81,7 +81,70 @@ CSVExporter.prototype = {
     convertToCSV : function(obj) {
         var data = [];
 
+        // Column headers
+        var row = "Date,Investment,TransactionType,Amount,Shares,Blank,";
+        for (var i = 0; i < obj.sources.length; i++) {
+            row += obj.sources[i] + ',';
+        }
+        data.push(row);
+
+        // Transactions (the website will provide in reverse chronological order)
+        for (var i = obj.data.length - 1; i >= 0; i--) {
+            var tx = obj.data[i];
+            var row = [];
+
+            row.push(tx.date);
+            row.push(tx.inv);
+            row.push(this.getSanitizedTransactionType(tx.type));
+            row.push(tx.amount);
+            row.push(tx.shares);
+            row.push('');
+
+            // Transaction source types.
+            var offset = 0;
+            for (var j = 0; j < tx.tx.length; j++,offset++) {
+                var cur = tx.tx[j];
+
+                var max = 0;
+                var count = 0;
+                console.debug(cur.source + ' ' + obj.sources[offset] + ' ' + (cur.source == obj.sources[offset]));
+                while (cur.source != obj.sources[offset])
+                {
+                    row.push('');
+                    offset++;
+                    max++;
+                    if (max > 10)
+                    {
+                        break;
+                    }
+                }
+
+                if (cur.source == obj.sources[offset]) {
+                    row.push(cur.amount);
+                }
+            }
+
+            data.push(row.join(','));
+        }
+
+
         return data.join('\n');
+    },
+
+    getSanitizedTransactionType : function(s) {
+        var arr = [
+            ['LOAN MAINT. FEE', 'Loan Maintenance Fee'],
+            ['CONTRIBUTION', 'Contribution'],
+            ['REAL TIME TRADE COMMISSION', 'Real time trade commission']
+        ];
+
+        for (var i = 0; i < arr.length; i++) {
+            if (s == arr[i][0]) {
+                return arr[i][1];
+            }
+        }
+
+        return s;
     },
 
     verifyInput : function() {
